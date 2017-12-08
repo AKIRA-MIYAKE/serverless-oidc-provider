@@ -1,0 +1,9 @@
+version: '3'
+
+services:
+  serverless:
+    build: ./docker/serverless
+    env_file:
+      - ${ENV_FILE}
+    volumes:
+      - ./:/serverless-oidc-provider

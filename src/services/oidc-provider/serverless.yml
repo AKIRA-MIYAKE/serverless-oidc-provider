@@ -1,0 +1,47 @@
+service: oidc-provider
+
+provider:
+  name: aws
+  runtime: nodejs6.10
+  versionFunctions: false
+  stage: ${env:ENV}
+  region: ${env:AWS_DEFAULT_REGION}
+  iamRoleStatements:
+    -  Effect: "Allow"
+       Action:
+         - "*"
+       Resource: arn:aws:dynamodb:${env:AWS_DEFAULT_REGION}:${env:AWS_ACCOUNT_ID}:table/${env:OIDC_DYNAMODB_TABLE_NAME}
+
+functions:
+  oidc:
+    handler: handler.oidc
+    environment:
+      DEBUG: oidc-provider:*
+      BABEL_CACHE_PATH: /tmp/.babel.json
+      ENV: ${env:ENV}
+      SECURE_KEYS: ${env:SECURE_KEYS}
+      OIDC_DYNAMODB_TABLE_NAME: ${env:OIDC_DYNAMODB_TABLE_NAME}
+    events:
+      - http:
+          path: /{proxy+}
+          method: ANY
+          cors: true
+
+plugins:
+  - serverless-webpack
+
+custom:
+  webpackIncludeModules:
+    packagePath: '../../../package.json'
+    forceInclude:
+      - '@babel/core'
+      - '@babel/preset-env'
+      - '@babel/polyfill'
+      - '@babel/register'
+      - 'oidc-provider'
+      - 'oidc-provider-dynamodb-adapter'
+      - 'koa'
+      - 'koa-logger'
+      - 'koa-mount'      
+    forceExclude:
+      - 'aws-sdk'

@@ -1,0 +1,46 @@
+{
+  "name": "serverless-oidc-provider",
+  "version": "0.0.0",
+  "description": "Starter kit for providing OpenID Provider(OP) with serverless architectures using AWS Lambda.",
+  "scripts": {
+    "generate-keys": "node ./src/oidc/keystore/generate-keys.js",
+    "test": "jest"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/AKIRA-MIYAKE/serverless-oidc-provider.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/AKIRA-MIYAKE/serverless-oidc-provider/issues"
+  },
+  "homepage": "https://github.com/AKIRA-MIYAKE/serverless-oidc-provider#readme",
+  "devDependencies": {
+    "babel-jest": "^21.3.0-beta.13",
+    "babel-loader": "^8.0.0-beta.0",
+    "eslint": "^4.12.1",
+    "eslint-config-airbnb-base": "^12.1.0",
+    "eslint-plugin-import": "^2.8.0",
+    "jest": "^21.3.0-beta.13",
+    "serverless": "^1.24.1",
+    "serverless-webpack": "^4.1.0",
+    "webpack": "^3.10.0"
+  },
+  "dependencies": {
+    "@babel/core": "^7.0.0-beta.34",
+    "@babel/polyfill": "^7.0.0-beta.34",
+    "@babel/preset-env": "^7.0.0-beta.34",
+    "@babel/register": "^7.0.0-beta.34",
+    "aws-sdk": "^2.165.0",
+    "koa": "^2.4.1",
+    "koa-logger": "^3.1.0",
+    "koa-mount": "^3.0.0",
+    "oidc-provider": "^2.8.0",
+    "oidc-provider-dynamodb-adapter": "0.0.0",
+    "serverless-http": "^1.5.2",
+    "util.promisify": "^1.0.0",
+    "whatwg-url": "^6.4.0"
+  }
+}
