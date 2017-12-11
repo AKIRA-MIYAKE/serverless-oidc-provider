@@ -1,11 +1,20 @@
 const serverlessHttp = require('serverless-http')
+const Provider = require('oidc-provider')
 
 const { generateApp } = require('./app')
 const { getMountOption } = require('./helpers/get-mount-option')
 const defaultSettings = require('./settings')
 
 const handleRequest = (event, context, callback, settings = defaultSettings) => {
-  generateApp(settings)
+  const oidc = new Provider(settings.issure, settings.configuration)
+
+  oidc.initialize(settings.initialization)
+  .thne(() => {
+    oidc.app.proxy = true
+    oidc.app.keys = settings.secureKeys
+
+    return oidc.app
+  })
   .then(app => {
     const mountOption = getMountOption(event)
 

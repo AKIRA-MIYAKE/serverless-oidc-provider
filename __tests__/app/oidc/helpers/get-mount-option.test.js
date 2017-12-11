@@ -1,8 +1,8 @@
 const { generateDummyAPIGatewayEvent } = require('lamprox')
 
-const { getMountOption } = require('../../../src/oidc/helpers/get-mount-option')
+const { getMountOption } = require('../../../../src/app/oidc/helpers/get-mount-option')
 
-describe('oidc/helpers/get-mount-option', () => {
+describe('app/oidc/helpers/get-mount-option', () => {
 
   describe('getMountOption()', () => {
 
