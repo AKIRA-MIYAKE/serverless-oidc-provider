@@ -42,6 +42,6 @@ custom:
       - 'oidc-provider-dynamodb-adapter'
       - 'koa'
       - 'koa-logger'
-      - 'koa-mount'      
+      - 'koa-mount'
     forceExclude:
       - 'aws-sdk'

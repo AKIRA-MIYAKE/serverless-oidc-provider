@@ -1,6 +1,7 @@
 const serverlessHttp = require('serverless-http')
 
 const { generateApp } = require('./app')
+const { getMountOption } = require('./helpers/get-mount-option')
 const defaultSettings = require('./settings')
 
 const handleRequest = (event, context, callback, settings = defaultSettings) => {
@@ -10,7 +11,10 @@ const handleRequest = (event, context, callback, settings = defaultSettings) => 
 
     let koaApp
     if (!mountOption) {
+      const logger = require('koa-logger')
+
       koaApp = app
+      koaApp.use(logger())
     } else {
       const Koa = require('koa')
       const logger = require('koa-logger')
@@ -28,20 +32,6 @@ const handleRequest = (event, context, callback, settings = defaultSettings) => 
     serverlessHttp(koaApp)(event, context, callback)
   })
   .catch(error => callback(error))
-}
-
-const getMountOption = event => {
-  const resource = event.resource
-  const appPath = `/${event.pathParameters.proxy}`
-  const requestContextPath = event.requestContext.path
-
-  const internal = resource.split('/').slice(0, -1).join('/')
-  const external = requestContextPath.substring(0, requestContextPath.length - appPath.length)
-
-  const directory = external + internal
-  const rewriteEventPath = external + internal + appPath
-
-  return (directory.length > 0) ? { directory, rewriteEventPath } : undefined
 }
 
 module.exports = { handleRequest }
