@@ -1,23 +1,18 @@
 const serverlessHttp = require('serverless-http')
-const Provider = require('oidc-provider')
 
+const { getOIDCApp } = require('./get-oidc-app')
 const { getMountOption } = require('./helpers/get-mount-option')
 const defaultSettings = require('./settings')
 
 const handleRequest = async (event, context, callback, settings = defaultSettings) => {
-  const oidc = new Provider(settings.issure, settings.configuration)
-
-  await oidc.initialize(settings.initialization)
-  oidc.app.proxy = true
-  oidc.app.keys = settings.secureKeys
-
+  const app = await getOIDCApp(settings)
   const mountOption = getMountOption(event)
 
   let koaApp
   if (!mountOption) {
     const logger = require('koa-logger')
 
-    koaApp = oidc.app
+    koaApp = app
     koaApp.use(logger())
   } else {
     const Koa = require('koa')
@@ -28,7 +23,7 @@ const handleRequest = async (event, context, callback, settings = defaultSetting
     koaApp.proxy = true
     koaApp.keys = settings.secureKeys
     koaApp.use(logger())
-    koaApp.use(mount(mountOption.directory, oidc.app))
+    koaApp.use(mount(mountOption.directory, app))
 
     event.path = mountOption.rewriteEventPath
   }
