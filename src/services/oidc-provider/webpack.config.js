@@ -15,10 +15,17 @@ module.exports = {
     '@babel/polyfill',
     '@babel/register',
     'oidc-provider',
+    'oidc-provider/lib/helpers/weak_cache',
+    'oidc-provider/lib/shared/error_handler',
+    'oidc-provider/lib/shared/selective_body',
     'oidc-provider-dynamodb-adapter/fallback',
     'koa',
+    'koa-compose',
+    'koa-body',
     'koa-logger',
-    'koa-mount'
+    'koa-mount',
+    'koa-router',
+    'ejs'
   ],
 
   target: 'node',
@@ -30,6 +37,11 @@ module.exports = {
       {
         test: /\.jsx?$/,
         loaders: ['babel-loader'],
+        include: ['/serverless-oidc-provider/src']
+      },
+      {
+        test: /\.ejs$/,
+        loaders: ['raw-loader'],
         include: ['/serverless-oidc-provider/src']
       }
     ]
