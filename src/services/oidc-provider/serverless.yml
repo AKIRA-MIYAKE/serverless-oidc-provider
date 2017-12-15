@@ -10,7 +10,11 @@ provider:
     -  Effect: "Allow"
        Action:
          - "*"
-       Resource: arn:aws:dynamodb:${env:AWS_DEFAULT_REGION}:${env:AWS_ACCOUNT_ID}:table/${env:OIDC_DYNAMODB_TABLE_NAME}
+       Resource: arn:aws:dynamodb:${env:AWS_DEFAULT_REGION}:${env:AWS_ACCOUNT_ID}:table/${env:AWS_DYNAMODB_TABLE_NAME}
+    -  Effect: "Allow"
+       Action:
+         - "*"
+       Resource: arn:aws:cognito-idp:${env:AWS_DEFAULT_REGION}:${env:AWS_ACCOUNT_ID}:userpool/${env:AWS_COGNITO_USER_POOL_ID}
 
 functions:
   oidc:
@@ -18,9 +22,11 @@ functions:
     environment:
       DEBUG: oidc-provider:*
       BABEL_CACHE_PATH: /tmp/.babel.json
-      ENV: ${env:ENV}
+      OIDC_ISSURE: ${env:OIDC_ISSURE}
       SECURE_KEYS: ${env:SECURE_KEYS}
-      OIDC_DYNAMODB_TABLE_NAME: ${env:OIDC_DYNAMODB_TABLE_NAME}
+      AWS_DYNAMODB_TABLE_NAME: ${env:AWS_DYNAMODB_TABLE_NAME}
+      AWS_COGNITO_USER_POOL_ID: ${env:AWS_COGNITO_USER_POOL_ID}
+      AWS_COGNITO_USER_POOL_CLIENT_ID: ${env:AWS_COGNITO_USER_POOL_CLIENT_ID}
     events:
       - http:
           path: /{proxy+}
@@ -41,7 +47,11 @@ custom:
       - 'oidc-provider'
       - 'oidc-provider-dynamodb-adapter'
       - 'koa'
+      - 'koa-compose'
+      - 'koa-body'
       - 'koa-logger'
-      - 'koa-mount'      
+      - 'koa-mount'
+      - 'koa-router'
+      - 'ejs'
     forceExclude:
       - 'aws-sdk'

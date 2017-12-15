@@ -1,4 +1,3 @@
-const { handleRequest } = require('../../oidc')
-const settings = require('../../oidc/settings')
+const { handleRequest } = require('../../app/oidc')
 
-module.exports.oidc = (event, context, callback) => handleRequest(event, context, callback, settings)
+module.exports.oidc = (event, context, callback) => handleRequest(event, context, callback)
