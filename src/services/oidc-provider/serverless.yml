@@ -20,8 +20,8 @@ functions:
   oidc:
     handler: handler.oidc
     environment:
-      DEBUG: oidc-provider:*
-      BABEL_CACHE_PATH: /tmp/.babel.json
+      DEBUG: oidc-provider:*  # Debugging of oidc-provider is enabled.
+      BABEL_CACHE_PATH: /tmp/.babel.json  # Set the write destination of the cache file on the tmp directory.
       OIDC_ISSURE: ${env:OIDC_ISSURE}
       SECURE_KEYS: ${env:SECURE_KEYS}
       AWS_DYNAMODB_TABLE_NAME: ${env:AWS_DYNAMODB_TABLE_NAME}
@@ -37,6 +37,7 @@ plugins:
   - serverless-webpack
 
 custom:
+  packExternalModulesMaxBuffer: 400 * 1024
   webpackIncludeModules:
     packagePath: '../../../package.json'
     forceInclude:
@@ -48,10 +49,8 @@ custom:
       - 'oidc-provider-dynamodb-adapter'
       - 'koa'
       - 'koa-compose'
-      - 'koa-body'
       - 'koa-logger'
       - 'koa-mount'
-      - 'koa-router'
       - 'ejs'
     forceExclude:
       - 'aws-sdk'

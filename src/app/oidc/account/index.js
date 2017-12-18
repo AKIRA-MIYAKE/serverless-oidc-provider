@@ -13,8 +13,8 @@ const setConfig = (config = {}) => {
   _config = Object.assign({}, _config, config)
 }
 
-/*
- * The account class corresponding to the interface of findById().
+/**
+ * Account class corresponding to the interface of findById().
  */
 class Account {
 
@@ -105,7 +105,6 @@ class Account {
     })
   }
 
-  //
   constructor(id, claims) {
     this.accountId = id
     this.claims = claims

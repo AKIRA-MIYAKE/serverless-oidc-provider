@@ -1,6 +1,7 @@
-/*
+/**
  * Using API Gateway and Lambda dynamically changes the directory path.
  * A helper method for getting those information.
+ * @param { Object } event - Event passed from API Gateway.
  */
 const getMountOption = event => {
   const resource = event.resource

@@ -1,5 +1,9 @@
 const Provider = require('oidc-provider')
 
+/**
+ * Function to set up oidc provider app.
+ * @param { Object } settings - Values for setting and initializing Provider.
+ */
 const setupApp = async settings => {
   const oidc = new Provider(settings.issure, settings.configuration)
 

@@ -12,6 +12,10 @@ Adapter.setConfig({
   tableName: process.env.AWS_DYNAMODB_TABLE_NAME
 })
 
+/**
+ * Values for setting and initializing Provider.
+ * @see https://github.com/panva/node-oidc-provider/blob/master/docs/configuration.md
+ */
 const settings = {
   issure: process.env.OIDC_ISSURE,
   secureKeys: process.env.SECURE_KEYS.split(','),
@@ -46,17 +50,29 @@ const settings = {
   },
   initialization: {
     keystore: keystore,
-    clients: [{
-      client_id: '348bf290-b0b5-4e8c-8df6-8f862fa11363',
-      client_secret: '2LRQOccHgaUUsDsnjb4ZeU6FLsMS1agPJJNt13llXTHHD1gaVqeehR4JJhZQSo6nF9HUc6a58Urm04GR5VIY0b',
-      response_types: ['none', 'id_token', 'id_token token', 'code', 'code token', 'code id_token', 'code id_token token'],
-      grant_types: ['authorization_code', 'implicit', 'refresh_token', 'client_credentials'],
-      redirect_uris: ['https://example.com'],
-      application_type: 'web',
-      client_name: 'Example',
-      client_uri: 'https://example.com',
-      logo_uri: 'https://avatars3.githubusercontent.com/u/2390987'
-    }],
+    clients: [
+      // Client for introspection.
+      {
+        client_id: '088f4309-849b-46bb-a375-8c5034cca70d',
+        client_secret: 'TV09cKjMxePom3LW2yiuPap9VTiOxQOysrbNqRKujRHIVL84coEWFjStXX4Gb2PjXaGTWOTi2LbDEDm8HOR4RH',
+        response_types: [],
+        grant_types: [],
+        redirect_uris: [],
+        client_name: 'Introspection'
+      },
+      // Example client.
+      {
+        client_id: '348bf290-b0b5-4e8c-8df6-8f862fa11363',
+        client_secret: '2LRQOccHgaUUsDsnjb4ZeU6FLsMS1agPJJNt13llXTHHD1gaVqeehR4JJhZQSo6nF9HUc6a58Urm04GR5VIY0b',
+        response_types: ['none', 'id_token', 'id_token token', 'code', 'code token', 'code id_token', 'code id_token token'],
+        grant_types: ['authorization_code', 'implicit', 'refresh_token', 'client_credentials'],
+        redirect_uris: ['https://example.com'],
+        application_type: 'web',
+        client_name: 'Example',
+        client_uri: 'https://example.com',
+        logo_uri: 'https://avatars3.githubusercontent.com/u/2390987'
+      }
+    ],
     adapter: Adapter
   }
 }
