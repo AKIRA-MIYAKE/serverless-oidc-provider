@@ -4,8 +4,12 @@ const { setupApp } = require('./setup-app')
 const { getMountOption } = require('./helpers/get-mount-option')
 const defaultSettings = require('./settings')
 
-/*
+/**
  * A function for handling requests within the handler of lambda.
+ * @param { Object } event - Event passed from API Gateway.
+ * @param { Object } context - Lambda context.
+ * @param { Function } callback - Lambda callback.
+ * @param { ?Object } settings - Values for setting and initializing Provider.
  */
 const handleRequest = async (event, context, callback, settings = defaultSettings) => {
   const app = await setupApp(settings)

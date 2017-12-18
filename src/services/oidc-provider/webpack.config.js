@@ -21,10 +21,8 @@ module.exports = {
     'oidc-provider-dynamodb-adapter/fallback',
     'koa',
     'koa-compose',
-    'koa-body',
     'koa-logger',
     'koa-mount',
-    'koa-router',
     'ejs'
   ],
 
