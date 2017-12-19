@@ -21,7 +21,7 @@ const settings = {
   secureKeys: process.env.SECURE_KEYS.split(','),
   configuration: {
     findById: Account.findById,
-    // Cognito supports OpenID Connect standard climb by default.
+    // Cognito supports OpenID Connect standard claims by default.
     claims: {
       address: ['address'],
       email: ['email', 'email_verified'],
