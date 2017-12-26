@@ -1,0 +1,23 @@
+service: authorize
+
+provider:
+  name: aws
+  runtime: nodejs6.10
+  versionFunctions: false
+  stage: ${env:ENV}
+  region: ${env:AWS_DEFAULT_REGION}
+
+functions:
+  authorizer:
+    handler: handler.authorizer
+    environment:
+      AWS_CUSTOM_AUTHORIZER_INTROSPECTION_ENDPOINT: ${env:AWS_CUSTOM_AUTHORIZER_INTROSPECTION_ENDPOINT}
+      AWS_CUSTOM_AUTHORIZER_CLIENT_ID: ${env:AWS_CUSTOM_AUTHORIZER_CLIENT_ID}
+      AWS_CUSTOM_AUTHORIZER_CLIENT_SECRET: ${env:AWS_CUSTOM_AUTHORIZER_CLIENT_SECRET}
+
+plugins:
+  - serverless-webpack
+
+custom:
+  webpackIncludeModules:
+    packagePath: '../../../package.json'

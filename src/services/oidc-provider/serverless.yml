@@ -19,6 +19,7 @@ provider:
 functions:
   oidc:
     handler: handler.oidc
+    memorySize: 2048
     environment:
       DEBUG: oidc-provider:*  # Debugging of oidc-provider is enabled.
       BABEL_CACHE_PATH: /tmp/.babel.json  # Set the write destination of the cache file on the tmp directory.

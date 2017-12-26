@@ -51,6 +51,8 @@
     "lamprox": "^0.14.0",
     "oidc-provider": "^2.8.0",
     "oidc-provider-dynamodb-adapter": "0.0.0",
+    "request": "^2.83.0",
+    "request-promise-native": "^1.0.5",
     "serverless-http": "^1.5.2",
     "util.promisify": "^1.0.0",
     "whatwg-url": "^6.4.0"
