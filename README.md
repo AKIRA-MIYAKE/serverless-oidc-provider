@@ -80,3 +80,10 @@ The setting of AWS is `src/services/oidc-provider/serverless.yml`. Change each i
 ```
 $ ENV_FILE=.env docker-compose run --rm serverless npm run deploy
 ```
+
+## Custom Authorizer
+This project provide sample lambda function for use with Custom Authorizer of API Gateway on `src/services/authorize`.  
+It is a Custom Authorizer that uses introspection endpoint of [RFC7662: OAuth 2.0 Token Introspection](https://tools.ietf.org/html/rfc7662).  
+Of course, you can also use the introspection endpoint provided by node-oidc-provider.  
+Please see `src/app/authorize` for details.   
+And, `src/services/sample` is a sample of APIs protected by that Custom Authorizer.    
