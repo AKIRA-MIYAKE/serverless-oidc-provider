@@ -1,4 +1,4 @@
-require('../../_runtime')
+require('../../../_runtime')
 
 const { promisify } = require('util')
 const fs = require('fs')

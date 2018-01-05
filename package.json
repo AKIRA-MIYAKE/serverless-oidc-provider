@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "description": "Starter kit for providing OpenID Provider(OP) with serverless architectures using AWS Lambda.",
   "scripts": {
-    "generate-keys": "node ./src/oidc/keystore/generate-keys.js",
+    "generate-keys": "node ./src/app/oidc/keystore/generate-keys.js",
     "deploy": "cd /serverless-oidc-provider/src/services/oidc-provider && sls deploy",
     "test": "jest"
   },
