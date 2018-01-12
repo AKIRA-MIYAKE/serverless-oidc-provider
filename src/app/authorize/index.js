@@ -7,12 +7,14 @@ const authorizerHandler = async (event, context, callback) => {
 
   if (!token) {
     callback('Unauthorized')
+    return
   }
 
   const introspectionResult = await introspect(token)
 
   if (!introspectionResult.active) {
     callback('Unauthorized')
+    return
   }
 
   const { principalId, effect, resource, authContext } = await confirmPermission(introspectionResult, event.methodArn)
