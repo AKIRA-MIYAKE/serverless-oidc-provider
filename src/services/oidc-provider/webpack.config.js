@@ -1,8 +1,8 @@
 const path = require('path')
 
 module.exports = {
+  mode: process.env.NODE_ENV,
   entry: [
-    path.resolve(__dirname, '../../_runtime/index.js'),
     path.resolve(__dirname, 'handler.js')
   ],
   output: {
@@ -12,13 +12,12 @@ module.exports = {
   },
   externals: [
     'aws-sdk',
-    '@babel/polyfill',
-    '@babel/register',
     'oidc-provider',
     'oidc-provider/lib/helpers/weak_cache',
     'oidc-provider/lib/shared/error_handler',
     'oidc-provider/lib/shared/selective_body',
-    'oidc-provider-dynamodb-adapter/fallback',
+    'oidc-provider-dynamodb-adapter',
+    'aws-serverless-express',
     'koa',
     'koa-compose',
     'koa-logger',
@@ -31,16 +30,14 @@ module.exports = {
     extensions: ['.js', '.jsx', '.json']
   },
   module: {
-    loaders: [
+    rules: [
       {
         test: /\.jsx?$/,
-        loaders: ['babel-loader'],
-        include: ['/serverless-oidc-provider/src']
+        use: ['babel-loader']
       },
       {
         test: /\.ejs$/,
-        loaders: ['raw-loader'],
-        include: ['/serverless-oidc-provider/src']
+        use: ['raw-loader']
       }
     ]
   },

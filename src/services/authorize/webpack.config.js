@@ -1,6 +1,7 @@
 const path = require('path')
 
 module.exports = {
+  mode: process.env.NODE_ENV,
   entry: path.resolve(__dirname, 'handler.js'),
   output: {
     libraryTarget: 'commonjs2',
@@ -14,11 +15,10 @@ module.exports = {
     extensions: ['.js', '.jsx', '.json']
   },
   module: {
-    loaders: [
+    rules: [
       {
         test: /\.jsx?$/,
-        loaders: ['babel-loader'],
-        include: ['/serverless-oidc-provider/src']
+        use: ['babel-loader']
       }
     ]
   },

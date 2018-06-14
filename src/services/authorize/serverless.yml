@@ -2,7 +2,7 @@ service: authorize
 
 provider:
   name: aws
-  runtime: nodejs6.10
+  runtime: nodejs8.10
   versionFunctions: false
   stage: ${env:ENV}
   region: ${env:AWS_DEFAULT_REGION}
