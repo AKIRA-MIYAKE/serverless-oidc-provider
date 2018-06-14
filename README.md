@@ -7,11 +7,6 @@ You do not need to implement the mechanism of user authentication and data persi
 Use [node-oidc-provider](https://github.com/panva/node-oidc-provider) to provide necessary functions as OpenID Provider(OP), and it is highly customizable.  
 By using [Serverless Framework](https://serverless.com/framework/) built in the project, you can deploy applications easily and quickly.  
 
-**Caution**  
-In order to execute node-oidc-provider using Koa2 on lambda, using @babel/register of 7.0.0-beta. Therefore, it is possible that some problems may occur, such as testing and executing local lambda functions.  
-In addition, the runtime transpile affects the execution speed.  
-These problems should be solved by lambda supporting the new node version.  
-
 ## Usage
 ### Preparation
 #### DynamoDB

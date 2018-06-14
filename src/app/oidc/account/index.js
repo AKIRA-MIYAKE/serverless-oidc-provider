@@ -3,34 +3,32 @@ const url = require('url')
 const { CognitoIdentityServiceProvider } = require('aws-sdk')
 const jwt = require('jsonwebtoken')
 
-let _config = {
+let sharedConfig = {
   cognitoIdentityServiceProvider: new CognitoIdentityServiceProvider(),
   clientId: process.env.AWS_COGNITO_USER_POOL_CLIENT_ID,
   userPoolId: process.env.AWS_COGNITO_USER_POOL_ID
 }
 
 const setConfig = (config = {}) => {
-  _config = Object.assign({}, _config, config)
+  sharedConfig = Object.assign({}, sharedConfig, config)
 }
 
 /**
  * Account class corresponding to the interface of findById().
  */
 class Account {
-
   static setConfig(config) {
     setConfig(config)
   }
 
   static async signIn(params) {
     return Promise.resolve()
-    .then(() => {
-      return new Promise((resolve, reject) => {
+      .then(() => new Promise((resolve, reject) => {
         // Try to log in as administrator using parameters passed from user.
-        _config.cognitoIdentityServiceProvider.adminInitiateAuth({
+        sharedConfig.cognitoIdentityServiceProvider.adminInitiateAuth({
           AuthFlow: 'ADMIN_NO_SRP_AUTH',
-          ClientId: _config.clientId,
-          UserPoolId: _config.userPoolId,
+          ClientId: sharedConfig.clientId,
+          UserPoolId: sharedConfig.userPoolId,
           AuthParameters: {
             USERNAME: params.username,
             PASSWORD: params.password
@@ -42,23 +40,22 @@ class Account {
           }
           resolve(data)
         })
+      }))
+      .then(data => {
+        // Decode Cognito's id token and get user's sub.
+        const idToken = jwt.decode(data.AuthenticationResult.IdToken)
+        return {
+          sub: idToken.sub,
+          raw: data
+        }
       })
-    })
-    .then(data => {
-      // Decode Cognito's id token and get user's sub.
-      const idToken = jwt.decode(data.AuthenticationResult.IdToken)
-      return {
-        sub: idToken.sub,
-        raw: data
-      }
-    })
   }
 
   static async signInErrorHandler(ctx, next) {
     try {
       await next()
     } catch (error) {
-      let redirectUrl = url.parse(ctx.oidc.urlFor('interaction', { grant: ctx.oidc.uuid })).pathname
+      const redirectUrl = url.parse(ctx.oidc.urlFor('interaction', { grant: ctx.oidc.uuid })).pathname
 
       switch (error.code) {
         case 'NotAuthorizedException':
@@ -79,37 +76,33 @@ class Account {
 
   static async findById(ctx, id) {
     return Promise.resolve()
-    .then(() => {
-      return new Promise((resolve, reject) => {
-        _config.cognitoIdentityServiceProvider.adminGetUser({
-          UserPoolId: _config.userPoolId,
-          Username: id
-        }, (error, data) => {
-          if (error) {
-            reject(error)
+      .then(() => new Promise((resolve, reject) => {
+        sharedConfig.cognitoIdentityServiceProvider.listUsers({
+          UserPoolId: sharedConfig.userPoolId,
+          Filter: `sub = "${id}"`,
+          Limit: 1
+        }, (error, results) => {
+          if (error || results.Users.length === 0) {
+            reject((error) ? error : new Error())
             return
           }
-          resolve(data)
+          resolve(results.Users[0])
         })
-      })
-    })
-    .then(data => {
-      const claims = async () => {
+      }))
+      .then(data => {
         // Return the value of Cognito's UserAttributes as climes.
-        return data.UserAttributes.reduce((acc, current) => {
+        const claims = async () => data.Attributes.reduce((acc, current) => {
           acc[current.Name] = current.Value
           return acc
         }, {})
-      }
-      return new Account(data.Username, claims)
-    })
+        return new Account(id, claims)
+      })
   }
 
   constructor(id, claims) {
     this.accountId = id
     this.claims = claims
   }
-
 }
 
 module.exports = Account

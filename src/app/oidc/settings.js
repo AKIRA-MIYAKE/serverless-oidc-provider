@@ -2,7 +2,7 @@ const url = require('url')
 
 const { DynamoDB } = require('aws-sdk')
 
-const Adapter = require('oidc-provider-dynamodb-adapter/fallback')
+const Adapter = require('oidc-provider-dynamodb-adapter')
 const Account = require('./account')
 const keystore = require('./keystore/keystore.json')
 
@@ -21,6 +21,9 @@ const settings = {
   secureKeys: process.env.SECURE_KEYS.split(','),
   configuration: {
     findById: Account.findById,
+    cookies: {
+      keys: process.env.SECURE_KEYS.split(',')
+    },
     // Cognito supports OpenID Connect standard claims by default.
     claims: {
       address: ['address'],

@@ -3,7 +3,7 @@ const url = require('url')
 const compose = require('koa-compose')
 const bodyParser = require('oidc-provider/lib/shared/selective_body')
 const instance = require('oidc-provider/lib/helpers/weak_cache')
-const createHttpError = require('http-errors')
+// const createHttpError = require('http-errors')
 
 const views = require('../views')
 const Account = require('../account')
@@ -12,9 +12,8 @@ const parseBody = bodyParser('application/x-www-form-urlencoded')
 
 module.exports = provider => {
   // Dynamic mounting is supported using a function similar to devInteraction.
-  instance(provider).configuration().interactionUrl = async ctx => {
-    return url.parse(ctx.oidc.urlFor('interaction', { grant: ctx.oidc.uuid })).pathname
-  }
+  instance(provider).configuration().interactionUrl = async ctx => url
+    .parse(ctx.oidc.urlFor('interaction', { grant: ctx.oidc.uuid })).pathname
 
   return {
     get: compose([
@@ -45,7 +44,7 @@ module.exports = provider => {
           error,
           returnTo: details.returnTo,
           params: details.params
-        };
+        }
         locals.body = views[view](locals)
 
         ctx.type = 'html'
@@ -62,7 +61,7 @@ module.exports = provider => {
         const details = await provider.interactionDetails(ctx.req)
 
         switch (ctx.oidc.body.view) {
-          case 'login':
+          case 'login': {
             const params = {
               username: ctx.oidc.body.username,
               password: ctx.oidc.body.password
@@ -71,29 +70,35 @@ module.exports = provider => {
             const data = await Account.signIn(params)
             const remember = !!ctx.oidc.body.remember
 
-            // If the user does not continue logging in, remove offline_access from the scope even if it is included in the request.
+            // If the user does not continue logging in,
+            // remove offline_access from the scope even if it is included in the request.
             const scope = (remember) ?
               details.params.scope :
               details.params.scope.split(' ')
-              .filter(v => (v !== 'offline_access'))
-              .join(' ')
+                .filter(v => (v !== 'offline_access'))
+                .join(' ')
 
             await provider.interactionFinished(ctx.req, ctx.res, {
               login: {
                 account: data.sub,
                 acr: '1',
-                remember: remember,
-                ts: Math.floor(Date.now() / 1000),
+                remember,
+                ts: Math.floor(Date.now() / 1000)
               },
               consent: { scope },
               meta: {
                 cognito: data.raw
               }
-            });
-            break;
-          case 'interaction':
+            })
+            break
+          }
+          case 'interaction': {
             await provider.interactionFinished(ctx.req, ctx.res, { consent: {} })
-            break;
+            break
+          }
+          default: {
+            break
+          }
         }
 
         await next()

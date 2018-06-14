@@ -2,7 +2,7 @@ service: oidc-provider
 
 provider:
   name: aws
-  runtime: nodejs6.10
+  runtime: nodejs8.10
   versionFunctions: false
   stage: ${env:ENV}
   region: ${env:AWS_DEFAULT_REGION}
@@ -39,19 +39,17 @@ plugins:
 
 custom:
   packExternalModulesMaxBuffer: 400 * 1024
-  webpackIncludeModules:
-    packagePath: '../../../package.json'
-    forceInclude:
-      - '@babel/core'
-      - '@babel/preset-env'
-      - '@babel/polyfill'
-      - '@babel/register'
-      - 'oidc-provider'
-      - 'oidc-provider-dynamodb-adapter'
-      - 'koa'
-      - 'koa-compose'
-      - 'koa-logger'
-      - 'koa-mount'
-      - 'ejs'
-    forceExclude:
-      - 'aws-sdk'
+  webpack:
+    includeModules:
+      packagePath: '../../../package.json'
+      forceInclude:
+        - 'oidc-provider'
+        - 'oidc-provider-dynamodb-adapter'
+        - 'koa'
+        - 'koa-compose'
+        - 'koa-logger'
+        - 'koa-mount'
+        - 'ejs'
+        - 'aws-serverless-express'
+      forceExclude:
+        - 'aws-sdk'
