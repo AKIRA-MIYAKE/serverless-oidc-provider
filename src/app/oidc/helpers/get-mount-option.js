@@ -10,8 +10,10 @@ const getMountOption = event => {
 
   // Directory specified by API Gateway setting.
   const internal = resource.split('/').slice(0, -1).join('/')
-  // Directory that appears due to external factors, such as execute-api or custom domain path settings.
-  const external = requestContextPath.substring(0, requestContextPath.length - (appPath.length + internal.length))
+  // Directory that appears due to external factors,
+  // such as execute-api or custom domain path settings.
+  const external = requestContextPath
+    .substring(0, requestContextPath.length - (appPath.length + internal.length))
 
   const directory = external + internal
 
