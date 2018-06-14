@@ -1,4 +1,4 @@
-const serverlessHttp = require('serverless-http')
+const serverless = require('aws-serverless-express')
 
 const { setupApp } = require('./setup-app')
 const { getMountOption } = require('./helpers/get-mount-option')
@@ -36,7 +36,17 @@ const handleRequest = async (event, context, callback, settings = defaultSetting
     event.path = mountOption.rewriteEventPath
   }
 
-  serverlessHttp(koaApp)(event, context, callback)
+  const server = serverless.createServer(koaApp.callback());
+
+  return new Promise((resolve, reject) => {
+    serverless.proxy(
+      server,
+      event,
+      Object.assign({}, context, {
+        succeed: process.env.IS_OFFLINE ? context.succeed : resolve
+      })
+    )
+  })
 }
 
 module.exports = { handleRequest }
